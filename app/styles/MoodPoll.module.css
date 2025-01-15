@@ -1,0 +1,43 @@
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .title {
+    text-align: center;
+  }
+  
+  .parameter {
+    margin-bottom: 20px;
+  }
+  
+  label {
+    display: block;
+    font-size: 1.2em;
+  }
+  
+  input[type="range"] {
+    width: 100%;
+    margin-top: 5px;
+  }
+  
+  span {
+    display: block;
+    margin-top: 5px;
+    text-align: right;
+  }
+  
+  .submitButton {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    font-size: 1.2em;
+    cursor: pointer;
+  }
+  
+  .result {
+    margin-top: 40px;
+    text-align: center;
+    font-size: 1.5em;
+  }

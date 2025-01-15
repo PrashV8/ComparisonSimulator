@@ -1,7 +1,12 @@
+/* Import Google Fonts at the very top */
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Roboto:wght@400;700&display=swap');
+
+/* Tailwind CSS directives */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* CSS Variables for Light and Dark Mode */
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -14,8 +19,57 @@
   }
 }
 
+/* Global styles */
 body {
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Keyframes for the text animation */
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes textShadow {
+  0% {
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.5), 0 0 10px rgba(255, 255, 255, 0.5);
+  }
+  50% {
+    text-shadow: 0 0 15px rgba(255, 255, 0, 0.8), 0 0 20px rgba(255, 255, 0, 0.8);
+  }
+  100% {
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.5), 0 0 10px rgba(255, 255, 255, 0.5);
+  }
+}
+
+/* Styles for the animated title */
+.animated-title {
+  font-family: 'Pacifico', cursive; /* Eye-catching font */
+  color: #cc40ff; /* Bright pink color */
+  animation: fadeIn 1s ease-in-out, textShadow 2s ease-in-out infinite alternate;
+  font-size: 4rem; /* Large font size */
+  letter-spacing: 2px; /* Increased letter spacing */
+  text-transform: uppercase; /* Uppercase letters for impact */
+  transition: transform 0.3s; /* Smooth hover effect */
+}
+
+/* Add a hover effect */
+.animated-title:hover {
+  transform: scale(1.05); /* Slightly enlarge on hover */
 }

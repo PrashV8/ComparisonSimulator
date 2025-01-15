@@ -1,101 +1,217 @@
-import Image from "next/image";
 
+'use client'; // Mark this as a Client Component
+
+import React, { useState } from 'react';
+import { Button, Container, TextField, Typography, List, ListItem, ListItemText, Paper, Grid } from '@mui/material';
+import ComparisonSimulator from '../components/ComparisonSimulator';
+import FileUpload from '../components/FileUpload';
+import { useTranslation } from 'react-i18next';
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const { t } = useTranslation('common');
+  const [textItems, setTextItems] = useState<string[]>([]);
+  const [imageItems, setImageItems] = useState<File[]>([]);
+  const [comparisonStarted, setComparisonStarted] = useState(false);
+  const [currentTextInput, setCurrentTextInput] = useState('');
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  const handleTextInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setCurrentTextInput(event.target.value);
+  };
+
+  const addTextItem = () => {
+    if (currentTextInput.trim()) {
+      setTextItems([...textItems, currentTextInput.trim()]);
+      setCurrentTextInput('');
+    }
+  };
+
+  const handleFilesUploaded = (files: File[]) => {
+    setImageItems([...imageItems, ...files]);
+  };
+
+  const startComparison = () => {
+    setComparisonStarted(true);
+  };
+
+  const refreshPage = () => {
+    window.location.reload(); // Refresh the page to start over
+  };
+
+  const totalItems = textItems.length + imageItems.length;
+
+  return (
+    <Container>
+    <Typography variant="h2" align="center" gutterBottom className="animated-title">
+      Comparison Simulator
+    </Typography>
+      {!comparisonStarted ? (
+        <div>
+          <Typography variant="h5" gutterBottom>
+            Add Text Items
+          </Typography>
+          <TextField
+            fullWidth
+            label="Enter a text item"
+            variant="outlined"
+            value={currentTextInput}
+            onChange={handleTextInput}
+            style={{ marginBottom: '10px' }}
+          />
+          
+          <Button variant="contained" color="primary" onClick={addTextItem} style={{ marginBottom: '20px' }}>
+            Add Text Item
+          </Button>
+          <Typography variant="h5" gutterBottom>
+            Add Images
+          </Typography>
+          <FileUpload onFilesUploaded={handleFilesUploaded} />
+
+          <Paper elevation={3} sx={{ p: 3, mt: 3, backgroundColor: '#f5f5f5' }}>
+              <Typography variant="h6" gutterBottom sx={{ mb: 2 }}>
+                Created/Uploaded Items: {totalItems}
+              </Typography>
+              <Grid container spacing={2}>
+                {textItems.map((item, index) => (
+                  <Grid item xs={12} sm={6} md={4} key={`text-${index}`}>
+                    <Paper elevation={2} sx={{ p: 2, textAlign: 'center', backgroundColor: 'white' }}>
+                      <Typography variant="body1">{item}</Typography>
+                    </Paper>
+                  </Grid>
+                ))}
+                {imageItems.map((item, index) => (
+                  <Grid item xs={12} sm={6} md={4} key={`image-${index}`}>
+                    <Paper elevation={2} sx={{ p: 2, textAlign: 'center', backgroundColor: 'white' }}>
+                      <img
+                        src={URL.createObjectURL(item)}
+                        alt={item.name}
+                        style={{ maxWidth: '100%', height: 'auto', borderRadius: '4px' }}
+                      />
+                      <Typography variant="body2" sx={{ mt: 1 }}>
+                        {item.name}
+                      </Typography>
+                    </Paper>
+                  </Grid>
+                ))}
+              </Grid>
+            </Paper>
+
+          <Button variant="contained" color="primary" onClick={startComparison} disabled={totalItems < 2}>
+            Start Comparison
+          </Button>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+      ) : (
+        <ComparisonSimulator textItems={textItems} imageItems={imageItems} onRefresh={refreshPage} />
+      )}
+    </Container>
   );
 }
+
+// 'use client';
+
+// import React, { useState } from 'react';
+// import { Button, Container, Typography, Paper, Grid } from '@mui/material';
+// import ComparisonSimulator from '../components/ComparisonSimulator';
+// import FileUpload from '../components/FileUpload';
+// import TiptapEditor from '../components/TiptapEditor'; // Use the updated Tiptap editor
+// import { useTranslation } from 'react-i18next';
+
+// export default function Home() {
+//   const { t } = useTranslation('common');
+//   const [textItems, setTextItems] = useState<string[]>([]);
+//   const [imageItems, setImageItems] = useState<File[]>([]);
+//   const [comparisonStarted, setComparisonStarted] = useState(false);
+//   const [currentTextInput, setCurrentTextInput] = useState('');
+
+//   const handleTextInput = (value: string) => {
+//     setCurrentTextInput(value);
+//   };
+
+//   const addTextItem = () => {
+//     if (currentTextInput.trim()) {
+//       setTextItems([...textItems, currentTextInput.trim()]);
+//       setCurrentTextInput('');
+//     }
+//   };
+
+//   const handleFilesUploaded = (files: File[]) => {
+//     setImageItems([...imageItems, ...files]);
+//   };
+
+//   const startComparison = () => {
+//     setComparisonStarted(true);
+//   };
+
+//   const refreshPage = () => {
+//     window.location.reload(); // Refresh the page to start over
+//   };
+
+//   const totalItems = textItems.length + imageItems.length;
+
+//   return (
+//     <Container>
+//       <Typography variant="h2" align="center" gutterBottom className="animated-title">
+//         Comparison Simulator
+//       </Typography>
+//       {!comparisonStarted ? (
+//         <div>
+//           <Typography variant="h5" gutterBottom>
+//             Add Text Items
+//           </Typography>
+//           <TiptapEditor value={currentTextInput} onChange={handleTextInput} />
+//           <Button
+//             variant="contained"
+//             color="primary"
+//             onClick={addTextItem}
+//             style={{ marginTop: '20px', marginBottom: '20px' }}
+//           >
+//             Add Text Item
+//           </Button>
+//           <Typography variant="h5" gutterBottom>
+//             Add Images
+//           </Typography>
+//           <FileUpload onFilesUploaded={handleFilesUploaded} />
+
+//           <Paper elevation={3} sx={{ p: 3, mt: 3, backgroundColor: '#f5f5f5' }}>
+//             <Typography variant="h6" gutterBottom sx={{ mb: 2 }}>
+//               Created/Uploaded Items: {totalItems}
+//             </Typography>
+//             <Grid container spacing={2}>
+//               {textItems.map((item, index) => (
+//                 <Grid item xs={12} sm={6} md={4} key={`text-${index}`}>
+//                   <Paper elevation={2} sx={{ p: 2, textAlign: 'center', backgroundColor: 'white' }}>
+//                     <div dangerouslySetInnerHTML={{ __html: item }} />
+//                   </Paper>
+//                 </Grid>
+//               ))}
+//               {imageItems.map((item, index) => (
+//                 <Grid item xs={12} sm={6} md={4} key={`image-${index}`}>
+//                   <Paper elevation={2} sx={{ p: 2, textAlign: 'center', backgroundColor: 'white' }}>
+//                     <img
+//                       src={URL.createObjectURL(item)}
+//                       alt={item.name}
+//                       style={{ maxWidth: '100%', height: 'auto', borderRadius: '4px' }}
+//                     />
+//                     <Typography variant="body2" sx={{ mt: 1 }}>
+//                       {item.name}
+//                     </Typography>
+//                   </Paper>
+//                 </Grid>
+//               ))}
+//             </Grid>
+//           </Paper>
+
+//           <Button
+//             variant="contained"
+//             color="primary"
+//             onClick={startComparison}
+//             disabled={totalItems < 2}
+//             sx={{ mt: 3 }}
+//           >
+//             Start Comparison
+//           </Button>
+//         </div>
+//       ) : (
+//         <ComparisonSimulator textItems={textItems} imageItems={imageItems} onRefresh={refreshPage} />
+//       )}
+//     </Container>
+//   );
+// }
