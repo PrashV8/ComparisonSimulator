@@ -113,7 +113,6 @@ const ComparisonSimulator: React.FC<ComparisonSimulatorProps> = ({ textItems, im
   }, [items]);
 
   const handleSelect = (selectedIndex: number) => {
-    const winnerItem = currentPair[selectedIndex];
     const loserItem = currentPair[1 - selectedIndex];
     setItems(items.filter((item) => item !== loserItem));
   };

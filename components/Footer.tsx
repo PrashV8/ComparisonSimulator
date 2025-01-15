@@ -1,5 +1,5 @@
 // components/Footer.tsx
-import { Box, Typography, Link } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 
 const Footer = () => {
   return (
