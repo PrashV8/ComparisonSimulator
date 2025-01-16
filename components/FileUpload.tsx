@@ -3,7 +3,7 @@
 
 import React, { useState } from 'react';
 import { Typography } from '@mui/material';
-
+import Image from 'next/image';
 interface FileUploadProps {
   onFilesUploaded: (files: File[]) => void;
 }
@@ -52,10 +52,12 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFilesUploaded }) => {
         id="file-upload"
       />
       <label htmlFor="file-upload" style={{ cursor: 'pointer' }}>
-        <img
+              <Image
           src="https://www.svgrepo.com/show/357902/image-upload.svg"
           alt="Upload"
-          style={{ width: '50px', marginBottom: '10px' }}
+          width={50} // Adjust as needed
+          height={50} // Adjust as needed
+          priority // For preloading
         />
         <Typography variant="body1">
           Drag and drop files here, or{' '}

@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import { Button, Container, TextField, Typography, Paper, Grid } from '@mui/material';
 import ComparisonSimulator from '../components/ComparisonSimulator';
 import FileUpload from '../components/FileUpload';
+import Image from 'next/image';
 export default function Home() {
   const [textItems, setTextItems] = useState<string[]>([]);
   const [imageItems, setImageItems] = useState<File[]>([]);
@@ -78,7 +79,7 @@ export default function Home() {
                 {imageItems.map((item, index) => (
                   <Grid item xs={12} sm={6} md={4} key={`image-${index}`}>
                     <Paper elevation={2} sx={{ p: 2, textAlign: 'center', backgroundColor: 'white' }}>
-                      <img
+                      <Image
                         src={URL.createObjectURL(item)}
                         alt={item.name}
                         style={{ maxWidth: '100%', height: 'auto', borderRadius: '4px' }}

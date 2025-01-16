@@ -87,7 +87,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Button, Container, Grid, Paper, Typography, Box, CircularProgress } from '@mui/material';
-
+import Image from 'next/image';
 interface ComparisonSimulatorProps {
   textItems: string[];
   imageItems: File[];
@@ -127,10 +127,12 @@ const ComparisonSimulator: React.FC<ComparisonSimulatorProps> = ({ textItems, im
           {typeof winner === 'string' ? (
             <Typography variant="h4">{winner}</Typography>
           ) : (
-            <img
+            <Image
               src={URL.createObjectURL(winner)}
               alt={winner.name}
-              style={{ maxWidth: '100%', height: 'auto', marginTop: '20px' }}
+              width={200} // Adjust as needed
+              height={200} // Adjust as needed
+              style={{ maxWidth: '100%', marginTop: '20px' }}
             />
           )}
           <Button variant="contained" color="primary" onClick={onRefresh} sx={{ mt: 3 }}>
@@ -146,7 +148,7 @@ const ComparisonSimulator: React.FC<ComparisonSimulatorProps> = ({ textItems, im
                   {typeof item === 'string' ? (
                     <Typography variant="h5">{item}</Typography>
                   ) : (
-                    <img
+                    <Image
                       src={URL.createObjectURL(item)}
                       alt={item.name}
                       style={{ maxWidth: '100%', height: 'auto' }}
